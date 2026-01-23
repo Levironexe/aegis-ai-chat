@@ -3,6 +3,7 @@ import {
   boolean,
   foreignKey,
   json,
+  jsonb,
   pgTable,
   primaryKey,
   text,
@@ -10,11 +11,20 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import type { AppUsage } from "../usage";
 
 export const user = pgTable("User", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   email: varchar("email", { length: 64 }).notNull(),
   password: varchar("password", { length: 64 }),
+  // Google OAuth fields
+  googleId: varchar("googleId", { length: 255 }),
+  name: varchar("name", { length: 255 }),
+  picture: text("picture"),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  tokenExpiresAt: timestamp("tokenExpiresAt"),
+  scopes: text("scopes"),
 });
 
 export type User = InferSelectModel<typeof user>;
@@ -29,6 +39,7 @@ export const chat = pgTable("Chat", {
   visibility: varchar("visibility", { enum: ["public", "private"] })
     .notNull()
     .default("private"),
+  lastContext: jsonb("lastContext").$type<AppUsage | null>(),
 });
 
 export type Chat = InferSelectModel<typeof chat>;

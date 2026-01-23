@@ -89,8 +89,7 @@
 
 /* define theme */
 @theme {
-  --font-sans: var(--font-geist);
-  --font-mono: var(--font-geist-mono);
+  --font-poppins: var(--font-poppins);
 
   --breakpoint-toast-mobile: 600px;
 
@@ -201,6 +200,7 @@
     @apply bg-background text-foreground;
     overflow-x: hidden;
     position: relative;
+    font-family: var(--font-poppins);
   }
 
   html {

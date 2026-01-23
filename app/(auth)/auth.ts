@@ -16,6 +16,7 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 
+  // biome-ignore lint/nursery/useConsistentTypeDefinitions: "Required"
   interface User {
     id?: string;
     email?: string | null;
@@ -70,6 +71,29 @@ export const {
       async authorize() {
         const [guestUser] = await createGuestUser();
         return { ...guestUser, type: "guest" };
+      },
+    }),
+    Credentials({
+      id: "google",
+      credentials: {
+        userId: { type: "text" },
+        email: { type: "text" },
+        name: { type: "text" },
+        image: { type: "text" },
+      },
+      async authorize(credentials: any) {
+        if (!credentials?.userId || !credentials?.email) {
+          return null;
+        }
+
+        // Return the Google user info from backend
+        return {
+          id: credentials.userId,
+          email: credentials.email,
+          name: credentials.name,
+          image: credentials.image,
+          type: "regular",
+        };
       },
     }),
   ],
