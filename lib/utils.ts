@@ -16,7 +16,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const fetcher = async (url: string) => {
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    credentials: 'include',
+  });
 
   if (!response.ok) {
     const { code, cause } = await response.json();
@@ -31,7 +33,11 @@ export async function fetchWithErrorHandlers(
   init?: RequestInit,
 ) {
   try {
-    const response = await fetch(input, init);
+    // Always include credentials for cookies
+    const response = await fetch(input, {
+      ...init,
+      credentials: 'include',
+    });
 
     if (!response.ok) {
       const { code, cause } = await response.json();

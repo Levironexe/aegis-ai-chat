@@ -24,6 +24,7 @@ import type { Vote } from "@/lib/db/schema";
 import { ChatSDKError } from "@/lib/errors";
 import type { Attachment, ChatMessage } from "@/lib/types";
 import { fetcher, fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
+import { getBackendUrl } from "@/lib/api/client";
 import { Artifact } from "./artifact";
 import { useDataStream } from "./data-stream-provider";
 import { Messages } from "./messages";
@@ -111,6 +112,7 @@ export function Chat({
           lastMessage?.role !== "user" ||
           request.messages.some((msg) =>
             msg.parts?.some((part) => {
+              if (!part) return false;
               const state = (part as { state?: string }).state;
               return (
                 state === "approval-responded" || state === "output-denied"
@@ -171,7 +173,7 @@ export function Chat({
   }, [query, sendMessage, hasAppendedQuery, id]);
 
   const { data: votes } = useSWR<Vote[]>(
-    messages.length >= 2 ? `/api/vote?chatId=${id}` : null,
+    messages.length >= 2 ? getBackendUrl(`/api/vote/${id}`) : null,
     fetcher
   );
 

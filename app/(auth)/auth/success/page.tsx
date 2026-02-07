@@ -21,7 +21,15 @@ function AuthSuccessContent() {
         process.env.NEXT_PUBLIC_BACKEND_URL ||
         "http://localhost:8000";
 
+      console.log("Auth callback - URL params:", {
+        userId,
+        email,
+        name,
+        picture,
+      });
+
       if (!userId || !email) {
+        console.error("Missing required auth parameters");
         setError("Missing user information from authentication");
         return;
       }
@@ -45,7 +53,7 @@ function AuthSuccessContent() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ userId }),
+            body: JSON.stringify({ user_id: userId }),
             credentials: "include", // Important: sends/receives cookies
           }
         );

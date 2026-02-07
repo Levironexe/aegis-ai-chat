@@ -25,6 +25,8 @@ export const user = pgTable("User", {
   refreshToken: text("refreshToken"),
   tokenExpiresAt: timestamp("tokenExpiresAt"),
   scopes: text("scopes"),
+  createdAt: timestamp("createdAt"),
+  updatedAt: timestamp("updatedAt"),
 });
 
 export type User = InferSelectModel<typeof user>;

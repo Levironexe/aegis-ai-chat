@@ -33,6 +33,7 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { getBackendUrl } from "@/lib/api/client";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
@@ -41,8 +42,9 @@ export function AppSidebar({ user }: { user: User | undefined }) {
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const handleDeleteAll = () => {
-    const deletePromise = fetch("/api/history", {
+    const deletePromise = fetch(getBackendUrl("/api/chat/history"), {
       method: "DELETE",
+      credentials: "include",
     });
 
     toast.promise(deletePromise, {
@@ -72,7 +74,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 }}
               >
                 <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
-                  COS30018  
+                  Aegis  
                 </span>
               </Link>
               <div className="flex flex-row gap-1">

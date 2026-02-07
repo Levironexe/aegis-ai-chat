@@ -5,6 +5,7 @@ import { useSWRConfig } from "swr";
 import { useCopyToClipboard } from "usehooks-ts";
 import type { Vote } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
+import { getBackendUrl } from "@/lib/api/client";
 import { Action, Actions } from "./elements/actions";
 import { CopyIcon, PencilEditIcon, ThumbDownIcon, ThumbUpIcon } from "./icons";
 
@@ -77,12 +78,14 @@ export function PureMessageActions({
         data-testid="message-upvote"
         disabled={vote?.isUpvoted}
         onClick={() => {
-          const upvote = fetch("/api/vote", {
-            method: "PATCH",
+          const upvote = fetch(getBackendUrl("/api/vote"), {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               chatId,
               messageId: message.id,
-              type: "up",
+              isUpvoted: true,
             }),
           });
 
@@ -90,7 +93,7 @@ export function PureMessageActions({
             loading: "Upvoting Response...",
             success: () => {
               mutate<Vote[]>(
-                `/api/vote?chatId=${chatId}`,
+                getBackendUrl(`/api/vote/${chatId}`),
                 (currentVotes) => {
                   if (!currentVotes) {
                     return [];
@@ -126,12 +129,14 @@ export function PureMessageActions({
         data-testid="message-downvote"
         disabled={vote && !vote.isUpvoted}
         onClick={() => {
-          const downvote = fetch("/api/vote", {
-            method: "PATCH",
+          const downvote = fetch(getBackendUrl("/api/vote"), {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               chatId,
               messageId: message.id,
-              type: "down",
+              isUpvoted: false,
             }),
           });
 
@@ -139,7 +144,7 @@ export function PureMessageActions({
             loading: "Downvoting Response...",
             success: () => {
               mutate<Vote[]>(
-                `/api/vote?chatId=${chatId}`,
+                getBackendUrl(`/api/vote/${chatId}`),
                 (currentVotes) => {
                   if (!currentVotes) {
                     return [];

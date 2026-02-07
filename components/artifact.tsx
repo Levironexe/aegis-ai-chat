@@ -20,6 +20,7 @@ import { useArtifact } from "@/hooks/use-artifact";
 import type { Document, Vote } from "@/lib/db/schema";
 import type { Attachment, ChatMessage } from "@/lib/types";
 import { fetcher } from "@/lib/utils";
+import { getBackendUrl } from "@/lib/api/client";
 import { ArtifactActions } from "./artifact-actions";
 import { ArtifactCloseButton } from "./artifact-close-button";
 import { ArtifactMessages } from "./artifact-messages";
@@ -95,7 +96,7 @@ function PureArtifact({
     mutate: mutateDocuments,
   } = useSWR<Document[]>(
     artifact.documentId !== "init" && artifact.status !== "streaming"
-      ? `/api/document?id=${artifact.documentId}`
+      ? getBackendUrl(`/api/document?id=${artifact.documentId}`)
       : null,
     fetcher
   );
@@ -135,7 +136,7 @@ function PureArtifact({
       }
 
       mutate<Document[]>(
-        `/api/document?id=${artifact.documentId}`,
+        getBackendUrl(`/api/document?id=${artifact.documentId}`),
         async (currentDocuments) => {
           if (!currentDocuments) {
             return [];
@@ -149,8 +150,10 @@ function PureArtifact({
           }
 
           if (currentDocument.content !== updatedContent) {
-            await fetch(`/api/document?id=${artifact.documentId}`, {
+            await fetch(getBackendUrl(`/api/document?id=${artifact.documentId}`), {
               method: "POST",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 title: artifact.title,
                 content: updatedContent,

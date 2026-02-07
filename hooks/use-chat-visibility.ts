@@ -9,6 +9,7 @@ import {
   getChatHistoryPaginationKey,
 } from "@/components/sidebar-history";
 import type { VisibilityType } from "@/components/visibility-selector";
+import { getBackendUrl } from "@/lib/api/client";
 
 export function useChatVisibility({
   chatId,
@@ -18,7 +19,7 @@ export function useChatVisibility({
   initialVisibilityType: VisibilityType;
 }) {
   const { mutate, cache } = useSWRConfig();
-  const history: ChatHistory = cache.get("/api/history")?.data;
+  const history: ChatHistory = cache.get(getBackendUrl("/api/chat/history"))?.data;
 
   const { data: localVisibility, mutate: setLocalVisibility } = useSWR(
     `${chatId}-visibility`,

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/sidebar";
 import type { Chat } from "@/lib/db/schema";
 import { fetcher } from "@/lib/utils";
+import { getBackendUrl } from "@/lib/api/client";
 import { LoaderIcon } from "./icons";
 import { ChatItem } from "./sidebar-history-item";
 
@@ -85,7 +86,7 @@ export function getChatHistoryPaginationKey(
   }
 
   if (pageIndex === 0) {
-    return `/api/history?limit=${PAGE_SIZE}`;
+    return getBackendUrl(`/api/history?limit=${PAGE_SIZE}`);
   }
 
   const firstChatFromPage = previousPageData.chats.at(-1);
@@ -94,7 +95,7 @@ export function getChatHistoryPaginationKey(
     return null;
   }
 
-  return `/api/history?ending_before=${firstChatFromPage.id}&limit=${PAGE_SIZE}`;
+  return getBackendUrl(`/api/history?ending_before=${firstChatFromPage.id}&limit=${PAGE_SIZE}`);
 }
 
 export function SidebarHistory({ user }: { user: User | undefined }) {
@@ -130,8 +131,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
     setShowDeleteDialog(false);
 
-    const deletePromise = fetch(`/api/chat?id=${chatToDelete}`, {
+    const deletePromise = fetch(getBackendUrl(`/api/chat/${chatToDelete}`), {
       method: "DELETE",
+      credentials: "include",
     });
 
     toast.promise(deletePromise, {
@@ -223,7 +225,12 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                   (paginatedChatHistory) => paginatedChatHistory.chats
                 );
 
-                const groupedChats = groupChatsByDate(chatsFromHistory);
+                // Deduplicate chats by ID
+                const uniqueChats = Array.from(
+                  new Map(chatsFromHistory.map((chat) => [chat.id, chat])).values()
+                );
+
+                const groupedChats = groupChatsByDate(uniqueChats);
 
                 return (
                   <div className="flex flex-col gap-6">

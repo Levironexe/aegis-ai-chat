@@ -27,13 +27,10 @@ async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
 
   const session = await auth();
 
-  if (!session) {
-    redirect("/api/auth/guest");
-  }
-
+  // Allow unauthenticated access, but redirect to login for private chats
   if (chat.visibility === "private") {
-    if (!session.user) {
-      return notFound();
+    if (!session || !session.user) {
+      redirect("/login");
     }
 
     if (session.user.id !== chat.userId) {

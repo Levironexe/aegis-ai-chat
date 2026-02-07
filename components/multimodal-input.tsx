@@ -27,6 +27,7 @@ import {
   ModelSelectorName,
   ModelSelectorTrigger,
 } from "@/components/ai-elements/model-selector";
+import { getBackendUrl } from "@/lib/api/client";
 import {
   chatModels,
   DEFAULT_CHAT_MODEL,
@@ -188,8 +189,9 @@ function PureMultimodalInput({
     formData.append("file", file);
 
     try {
-      const response = await fetch("/api/files/upload", {
+      const response = await fetch(getBackendUrl("/api/files/upload"), {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
 

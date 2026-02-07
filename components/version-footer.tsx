@@ -8,6 +8,7 @@ import { useWindowSize } from "usehooks-ts";
 import { useArtifact } from "@/hooks/use-artifact";
 import type { Document } from "@/lib/db/schema";
 import { getDocumentTimestampByIndex } from "@/lib/utils";
+import { getBackendUrl } from "@/lib/api/client";
 import { LoaderIcon } from "./icons";
 import { Button } from "./ui/button";
 
@@ -56,14 +57,15 @@ export const VersionFooter = ({
             setIsMutating(true);
 
             mutate(
-              `/api/document?id=${artifact.documentId}`,
+              getBackendUrl(`/api/document?id=${artifact.documentId}`),
               await fetch(
-                `/api/document?id=${artifact.documentId}&timestamp=${getDocumentTimestampByIndex(
+                getBackendUrl(`/api/document?id=${artifact.documentId}&timestamp=${getDocumentTimestampByIndex(
                   documents,
                   currentVersionIndex
-                )}`,
+                )}`),
                 {
                   method: "DELETE",
+                  credentials: "include",
                 }
               ),
               {
