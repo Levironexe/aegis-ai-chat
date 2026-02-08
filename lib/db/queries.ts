@@ -231,13 +231,29 @@ export async function getChatsByUserId({
 
 export async function getChatById({ id }: { id: string }) {
   try {
+    console.log('[DEBUG getChatById] Called with id:', id);
+    console.log('[DEBUG getChatById] POSTGRES_URL exists:', !!process.env.POSTGRES_URL);
+    console.log('[DEBUG getChatById] POSTGRES_URL value:', process.env.POSTGRES_URL?.substring(0, 50) + '...');
+
     const [selectedChat] = await db.select().from(chat).where(eq(chat.id, id));
+
+    console.log('[DEBUG getChatById] Query executed, result:', selectedChat ? 'Found' : 'NULL');
+    if (selectedChat) {
+      console.log('[DEBUG getChatById] Chat details:', {
+        id: selectedChat.id,
+        title: selectedChat.title,
+        userId: selectedChat.userId,
+        visibility: selectedChat.visibility
+      });
+    }
+
     if (!selectedChat) {
       return null;
     }
 
     return selectedChat;
   } catch (_error) {
+    console.error('[DEBUG getChatById] Error occurred:', _error);
     throw new ChatSDKError("bad_request:database", "Failed to get chat by id");
   }
 }
@@ -266,12 +282,19 @@ export async function updateMessage({
 
 export async function getMessagesByChatId({ id }: { id: string }) {
   try {
-    return await db
+    console.log('[DEBUG getMessagesByChatId] Called with chatId:', id);
+
+    const messages = await db
       .select()
       .from(message)
       .where(eq(message.chatId, id))
       .orderBy(asc(message.createdAt));
+
+    console.log('[DEBUG getMessagesByChatId] Found', messages.length, 'messages');
+
+    return messages;
   } catch (_error) {
+    console.error('[DEBUG getMessagesByChatId] Error occurred:', _error);
     throw new ChatSDKError(
       "bad_request:database",
       "Failed to get messages by chat id"
