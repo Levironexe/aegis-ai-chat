@@ -67,14 +67,18 @@ export async function createGuestUser() {
   const password = generateHashedPassword(generateUUID());
 
   try {
-    return await db.insert(user).values({ email, password }).returning({
+    console.log('[DEBUG createGuestUser] Attempting to create guest user with email:', email);
+    const result = await db.insert(user).values({ email, password }).returning({
       id: user.id,
       email: user.email,
     });
+    console.log('[DEBUG createGuestUser] Guest user created successfully:', result[0]?.email);
+    return result;
   } catch (_error) {
+    console.error('[DEBUG createGuestUser] Database error:', _error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to create guest user"
+      `Failed to create guest user: ${_error instanceof Error ? _error.message : 'Unknown error'}`
     );
   }
 }
@@ -253,8 +257,16 @@ export async function getChatById({ id }: { id: string }) {
 
     return selectedChat;
   } catch (_error) {
-    console.error('[DEBUG getChatById] Error occurred:', _error);
-    throw new ChatSDKError("bad_request:database", "Failed to get chat by id");
+    const error = _error as Error;
+    console.error('[DEBUG getChatById] Error details:', {
+      message: error.message,
+      name: error.name,
+      stack: error.stack?.split('\n')[0]
+    });
+    throw new ChatSDKError(
+      "bad_request:database",
+      `Failed to get chat by id: ${error.message}`
+    );
   }
 }
 

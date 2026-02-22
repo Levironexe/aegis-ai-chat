@@ -113,7 +113,7 @@ const providers = {
     ),
   },
   claude: {
-    title: "Open in Claude",
+    title: "Open in  ",
     createUrl: (q: string) =>
       `https://claude.ai/new?${new URLSearchParams({
         q,

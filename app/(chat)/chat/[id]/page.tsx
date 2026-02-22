@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
 import { auth } from "@/app/(auth)/auth";
 import { Chat } from "@/components/chat";
@@ -8,6 +9,32 @@ import { DataStreamHandler } from "@/components/data-stream-handler";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
 import { getChatById, getMessagesByChatId } from "@/lib/db/queries";
 import { convertToUIMessages } from "@/lib/utils";
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await props.params;
+
+  try {
+    const chat = await getChatById({ id });
+
+    if (!chat) {
+      return {
+        title: "Chat Not Found",
+      };
+    }
+
+    return {
+      title: chat.title,
+    };
+  } catch (error) {
+    console.error('[generateMetadata] Error fetching chat:', error);
+    // Return default title if there's a database error
+    return {
+      title: "Aegis",
+    };
+  }
+}
 
 export default function Page(props: { params: Promise<{ id: string }> }) {
   return (

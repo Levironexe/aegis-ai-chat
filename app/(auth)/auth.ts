@@ -70,7 +70,16 @@ export const {
       credentials: {},
       async authorize() {
         const [guestUser] = await createGuestUser();
-        return { ...guestUser, type: "guest" };
+        console.log('[DEBUG auth] Guest user created:', guestUser);
+
+        if (!guestUser || !guestUser.id) {
+          console.error('[DEBUG auth] Invalid guest user object:', guestUser);
+          return null;
+        }
+
+        const userWithType = { ...guestUser, type: "guest" as UserType };
+        console.log('[DEBUG auth] Returning user with type:', userWithType);
+        return userWithType;
       },
     }),
     Credentials({

@@ -13,13 +13,13 @@ export const chatModels: ChatModel[] = [
   // Aegis Agent (LangGraph multi-step reasoning)
   {
     id: "agent/cyber-analyst",
-    name: "Aegis Cyber Analyst (Agent)",
+    name: "Aegis Agent",
     provider: "agent",
     description: "Multi-step investigation agent with tool orchestration and MITRE ATT&CK mapping",
   },
   // Anthropic
   {
-    id: "anthropic/claude-haiku-4.5",
+    id: "claude/claude-haiku-4.5",
     name: "Claude Haiku 4.5",
     provider: "anthropic",
     description: "Fast and affordable, great for everyday tasks",
@@ -50,12 +50,12 @@ export const chatModels: ChatModel[] = [
   //   description: "Most capable OpenAI model",
   // },
   // Google
-  {
-    id: "google/gemini-2.0-flash-lite",
-    name: "Gemini 2.0 Flash Lite",
-    provider: "google",
-    description: "Ultra fast and affordable",
-  },
+  // {
+  //   id: "google/gemini-2.0-flash-lite",
+  //   name: "Gemini 2.0 Flash Lite",
+  //   provider: "google",
+  //   description: "Ultra fast and affordable",
+  // },
   // {
   //   id: "google/gemini-3-pro-preview",
   //   name: "Gemini 3 Pro",
@@ -70,18 +70,18 @@ export const chatModels: ChatModel[] = [
   //   description: "Fast with 30K context",
   // },
   // Reasoning models (extended thinking)
-  {
-    id: "anthropic/claude-3.7-sonnet-thinking",
-    name: "Claude 3.7 Sonnet",
-    provider: "reasoning",
-    description: "Extended thinking for complex problems",
-  },
-  {
-    id: "xai/grok-code-fast-1-thinking",
-    name: "Grok Code Fast",
-    provider: "reasoning",
-    description: "Reasoning optimized for code",
-  },
+  // {
+  //   id: "anthropic/claude-3.7-sonnet-thinking",
+  //   name: "Claude 3.7 Sonnet",
+  //   provider: "reasoning",
+  //   description: "Extended thinking for complex problems",
+  // },
+  // {
+  //   id: "xai/grok-code-fast-1-thinking",
+  //   name: "Grok Code Fast",
+  //   provider: "reasoning",
+  //   description: "Reasoning optimized for code",
+  // },
 ];
 
 // Group models by provider for UI
