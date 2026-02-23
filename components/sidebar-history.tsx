@@ -131,9 +131,16 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
     setShowDeleteDialog(false);
 
+    // Get user ID from localStorage
+    const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+
     const deletePromise = fetch(getBackendUrl(`/api/chat/${chatToDelete}`), {
       method: "DELETE",
       credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        ...(userId && { 'X-User-Id': userId }),
+      },
     });
 
     toast.promise(deletePromise, {

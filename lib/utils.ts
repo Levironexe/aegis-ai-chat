@@ -15,9 +15,24 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Get user ID from localStorage (set after OAuth login)
+ */
+function getUserId(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('userId');
+}
+
 export const fetcher = async (url: string) => {
+  // Get user ID and add to headers
+  const userId = getUserId();
+
   const response = await fetch(url, {
     credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(userId && { 'X-User-Id': userId }),
+    },
   });
 
   if (!response.ok) {
