@@ -10,6 +10,14 @@ interface RequestOptions extends RequestInit {
 }
 
 /**
+ * Get user ID from localStorage (set after OAuth login)
+ */
+function getUserId(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('userId');
+}
+
+/**
  * Make authenticated API request to backend
  */
 export async function apiRequest<T = any>(
@@ -25,12 +33,16 @@ export async function apiRequest<T = any>(
     url += `?${queryString}`;
   }
 
+  // Get user ID and add to headers
+  const userId = getUserId();
+
   // Add credentials to include cookies
   const response = await fetch(url, {
     ...fetchOptions,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(userId && { 'X-User-Id': userId }),
       ...fetchOptions.headers,
     },
   });

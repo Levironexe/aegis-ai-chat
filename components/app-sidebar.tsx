@@ -42,9 +42,16 @@ export function AppSidebar({ user }: { user: User | undefined }) {
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const handleDeleteAll = () => {
+    // Get user ID from localStorage
+    const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+
     const deletePromise = fetch(getBackendUrl("/api/chat/history"), {
       method: "DELETE",
       credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        ...(userId && { 'X-User-Id': userId }),
+      },
     });
 
     toast.promise(deletePromise, {

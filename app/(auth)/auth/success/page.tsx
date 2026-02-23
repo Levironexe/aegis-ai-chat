@@ -36,7 +36,8 @@ function AuthSuccessContent() {
 
       try {
         // Store user metadata in localStorage
-        localStorage.setItem("user_id", userId);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("user_id", userId); // Keep for backward compatibility
         localStorage.setItem("user_email", email);
         if (name) {
           localStorage.setItem("user_name", name);
