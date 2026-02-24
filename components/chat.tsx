@@ -198,7 +198,7 @@ export function Chat({
         />
 
         {messages.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-8 px-2 pb-3 md:px-4 md:pb-4 min-w-4xl mx-auto">
+          <div className="flex flex-1 flex-col items-center justify-center gap-8 px-2 pb-16 md:px-4 md:pb-22 w-full max-w-4xl mx-auto">
             <Greeting />
             <div className="w-full">
               {!isReadonly && (

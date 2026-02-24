@@ -80,7 +80,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   setOpenMobile(false);
                 }}
               >
-                <span className="cursor-pointer rounded-[14px] px-2 font-semibold text-lg">
+                <span className="cursor-pointer font-lora rounded-[14px] px-2 font-semibold text-xl">
                   Aegis  
                 </span>
               </Link>

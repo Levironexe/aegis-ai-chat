@@ -90,6 +90,7 @@
 /* define theme */
 @theme {
   --font-poppins: var(--font-poppins);
+  --font-lora: var(--font-lora);
 
   --breakpoint-toast-mobile: 600px;
 

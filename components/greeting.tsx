@@ -9,7 +9,7 @@ export const Greeting = () => {
     >
       <motion.div
         animate={{ opacity: 1, y: 0 }}
-        className="text-2xl mb-2 flex gap-2 items-center"
+        className="text-2xl mb-2 flex gap-2 items-center font-lora"
         exit={{ opacity: 0, y: 10 }}
         initial={{ opacity: 0, y: 10 }}
         transition={{ delay: 0.2 }}
@@ -25,7 +25,7 @@ export const Greeting = () => {
       </motion.div>
       <motion.div
         animate={{ opacity: 1, y: 0 }}
-        className="text-[32px]"
+        className="text-[32px] font-lora"
         exit={{ opacity: 0, y: 10 }}
         initial={{ opacity: 0, y: 10 }}
         transition={{ delay: 0.3 }}
