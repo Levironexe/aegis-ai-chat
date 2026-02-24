@@ -170,11 +170,15 @@ export const ModelSelectorLogo = ({
 }: ModelSelectorLogoProps) => (
   <Image
     alt={`${provider} logo`}
-    className={cn("size-3 dark:invert", className)}
+    className={cn("size-5 rounded-full bg-white p-0.5", className)}
     height={12}
-    src={`https://models.dev/logos/${provider}.svg`}
+    src={`/images/providers/${provider}.svg`}
     unoptimized
     width={12}
+    onError={(e) => {
+      const target = e.target as HTMLImageElement;
+      target.src = `https://models.dev/logos/${provider}.svg`;
+    }}
   />
 );
 

@@ -3,7 +3,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import type { UIMessage } from "ai";
 import equal from "fast-deep-equal";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, ChevronDown } from "lucide-react";
 import {
   type ChangeEvent,
   type Dispatch,
@@ -42,9 +42,9 @@ import {
   PromptInputToolbar,
   PromptInputTools,
 } from "./elements/prompt-input";
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons";
+import { ArrowUpIcon, PaperclipIcon, StopIcon, PlusIcon } from "./icons";
 import { PreviewAttachment } from "./preview-attachment";
-import { SuggestedActions } from "./suggested-actions";
+// import { SuggestedActions } from "./suggested-actions";
 import { Button } from "./ui/button";
 import type { VisibilityType } from "./visibility-selector";
 
@@ -299,16 +299,6 @@ function PureMultimodalInput({
 
   return (
     <div className={cn("relative flex w-full flex-col gap-4", className)}>
-      {messages.length === 0 &&
-        attachments.length === 0 &&
-        uploadQueue.length === 0 && (
-          <SuggestedActions
-            chatId={chatId}
-            selectedVisibilityType={selectedVisibilityType}
-            sendMessage={sendMessage}
-          />
-        )}
-
       <input
         className="pointer-events-none fixed -top-4 -left-4 size-0.5 opacity-0"
         multiple
@@ -319,13 +309,14 @@ function PureMultimodalInput({
       />
 
       <PromptInput
-        className="rounded-xl border border-border bg-background p-3 shadow-2xl dark:shadow-blue-500 shadow-blue-600 transition-all duration-200 focus-within:border-border hover:border-muted-foreground/50"
+        // className="rounded-4xl border border-border bg-sidebar p-3 shadow-2xl dark:shadow-blue-500 shadow-blue-600 transition-all duration-200 focus-within:border-border hover:border-muted-foreground/50 w-full"
+        className="rounded-4xl border border-border bg-sidebar p-3 shadow-2xl transition-all duration-200 focus-within:border-border hover:border-muted-foreground/50 w-full"
         onSubmit={(event) => {
           event.preventDefault();
           if (!input.trim() && attachments.length === 0) {
             return;
           }
-          
+
           if (status !== "ready") {
             toast.error("Please wait for the model to finish its response!");
             // submitForm();
@@ -376,30 +367,32 @@ function PureMultimodalInput({
             maxHeight={200}
             minHeight={44}
             onChange={handleInput}
-            placeholder="Send a message..."
+            placeholder="Ask anything..."
             ref={textareaRef}
             rows={1}
             value={input}
           />
         </div>
         <PromptInputToolbar className="border-top-0! border-t-0! p-0 shadow-none dark:border-0 dark:border-transparent!">
-          <PromptInputTools className="gap-0 sm:gap-0.5">
+          <PromptInputTools className="">
             <AttachmentsButton
               fileInputRef={fileInputRef}
               selectedModelId={selectedModelId}
               status={status}
             />
+            
+          </PromptInputTools>
+          <div className="flex gap-1 sm:gap-2">
             <ModelSelectorCompact
               onModelChange={onModelChange}
               selectedModelId={selectedModelId}
             />
-          </PromptInputTools>
 
           {status === "submitted" ? (
             <StopButton setMessages={setMessages} stop={stop} />
           ) : (
             <PromptInputSubmit
-              className="size-8 rounded-full bg-primary text-primary-foreground transition-colors duration-200 hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
+              className="cursor-pointer size-8 rounded-full bg-primary hover:bg-primary text-primary-foreground transition-colors duration-200 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
               data-testid="send-button"
               disabled={!input.trim() || uploadQueue.length > 0}
               status={status}
@@ -407,6 +400,8 @@ function PureMultimodalInput({
               <ArrowUpIcon size={14} />
             </PromptInputSubmit>
           )}
+          </div>
+          
         </PromptInputToolbar>
       </PromptInput>
     </div>
@@ -450,7 +445,7 @@ function PureAttachmentsButton({
 
   return (
     <Button
-      className="aspect-square h-8 rounded-lg p-1 transition-colors hover:bg-accent"
+      className="aspect-square h-8 rounded-full p-1 transition-colors bg-muted text-muted-foreground cursor-pointer duration-200"
       data-testid="attachments-button"
       disabled={status !== "ready" || isReasoningModel}
       onClick={(event) => {
@@ -459,7 +454,7 @@ function PureAttachmentsButton({
       }}
       variant="ghost"
     >
-      <PaperclipIcon size={14} style={{ width: 14, height: 14 }} />
+      <PlusIcon size={14} />
     </Button>
   );
 }
@@ -485,7 +480,7 @@ function PureModelSelectorCompact({
   const providerNames: Record<string, string> = {
     anthropic: "Anthropic",
     // openai: "OpenAI",
-    google: "Google",
+    // google: "Google",
     // xai: "xAI",
     // reasoning: "Reasoning",
   };
@@ -493,9 +488,10 @@ function PureModelSelectorCompact({
   return (
     <ModelSelector onOpenChange={setOpen} open={open}>
       <ModelSelectorTrigger asChild>
-        <Button className="h-8 w-[200px] justify-between px-2" variant="ghost">
+        <Button className="h-8 w-auto rounded-full justify-between px-3" variant="ghost">
           {provider && <ModelSelectorLogo provider={provider} />}
           <ModelSelectorName>{selectedModel.name}</ModelSelectorName>
+          <ChevronDown />
         </Button>
       </ModelSelectorTrigger>
       <ModelSelectorContent>
@@ -547,7 +543,7 @@ function PureStopButton({
 }) {
   return (
     <Button
-      className="size-7 rounded-full bg-foreground p-1 text-background transition-colors duration-200 hover:bg-foreground/90 disabled:bg-muted disabled:text-muted-foreground"
+      className="size-7 rounded-full bg-foreground p-1 text-background transition-colors duration-200 hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
       data-testid="stop-button"
       onClick={(event) => {
         event.preventDefault();

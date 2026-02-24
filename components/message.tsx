@@ -229,7 +229,7 @@ const PurePreviewMessage = ({
                       {state === "approval-requested" && approvalId && (
                         <div className="flex items-center justify-end gap-2 border-t px-4 py-3">
                           <button
-                            className="rounded-md px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
+                            className="rounded-[14px] px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
                             onClick={() => {
                               addToolApprovalResponse({
                                 id: approvalId,
@@ -242,7 +242,7 @@ const PurePreviewMessage = ({
                             Deny
                           </button>
                           <button
-                            className="rounded-md bg-primary px-3 py-1.5 text-primary-foreground text-sm transition-colors hover:bg-primary/90"
+                            className="rounded-[14px] bg-background px-3 py-1.5 text-primary-foreground text-sm transition-colors hover:bg-background/90"
                             onClick={() => {
                               addToolApprovalResponse({
                                 id: approvalId,

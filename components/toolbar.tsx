@@ -90,7 +90,7 @@ const Tool = ({
         <motion.div
           animate={{ opacity: 1, transition: { delay: 0.1 } }}
           className={cx("rounded-full p-3", {
-            "bg-primary text-primary-foreground!": selectedTool === description,
+            "bg-background text-primary-foreground!": selectedTool === description,
           })}
           exit={{
             scale: 0.9,
@@ -190,7 +190,7 @@ const ReadingLevelSelector = ({
               className={cx(
                 "absolute flex flex-row items-center rounded-full border bg-background p-3",
                 {
-                  "bg-primary text-primary-foreground": currentLevel !== 2,
+                  "bg-background text-primary-foreground": currentLevel !== 2,
                   "bg-background text-foreground": currentLevel === 2,
                 }
               )}

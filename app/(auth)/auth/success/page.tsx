@@ -100,7 +100,7 @@ function AuthSuccessContent() {
           </h1>
           <p className="text-gray-600 dark:text-zinc-400">{error}</p>
           <button
-            className="mt-4 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            className="mt-4 rounded-[14px] bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             onClick={() => router.push("/login")}
             type="button"
           >

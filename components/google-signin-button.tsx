@@ -11,7 +11,7 @@ export function GoogleSignInButton() {
 
   return (
     <Button
-      className="w-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+      className="rounded-[14px] w-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
       id="google-signin-button"
       onClick={handleGoogleSignIn}
       type="button"

@@ -183,18 +183,18 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
   if (isLoading) {
     return (
       <SidebarGroup>
-        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
+        <div className="px-2 py-1 text-sidebar-foreground/50 text-sm">
           Today
         </div>
         <SidebarGroupContent>
           <div className="flex flex-col">
             {[44, 32, 28, 64, 52].map((item) => (
               <div
-                className="flex h-8 items-center gap-2 rounded-md px-2"
+                className="flex h-8 items-center gap-2 rounded-[14px] px-2"
                 key={item}
               >
                 <div
-                  className="h-4 max-w-(--skeleton-width) flex-1 rounded-md bg-sidebar-accent-foreground/10"
+                  className="h-4 max-w-(--skeleton-width) flex-1 rounded-[14px] bg-background-accent-foreground/10"
                   style={
                     {
                       "--skeleton-width": `${item}%`,
@@ -213,7 +213,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     return (
       <SidebarGroup>
         <SidebarGroupContent>
-          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 text-sm text-zinc-500">
+          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 text-sm text-zinc-500 ">
             Your conversations will appear here once you start chatting!
           </div>
         </SidebarGroupContent>

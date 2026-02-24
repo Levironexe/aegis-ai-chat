@@ -69,7 +69,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
 
   return (
     <>
-      <Sidebar className="group-data-[side=left]:border-r-0">
+      <Sidebar className="group-data-[side=left]:border group-data-[side=left]:border-border">
         <SidebarHeader>
           <SidebarMenu>
             <div className="flex flex-row items-center justify-between">
@@ -80,7 +80,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                   setOpenMobile(false);
                 }}
               >
-                <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
+                <span className="cursor-pointer rounded-[14px] px-2 font-semibold text-lg">
                   Aegis  
                 </span>
               </Link>

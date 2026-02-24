@@ -41,7 +41,7 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea> & {
 export const PromptInputTextarea = ({
   onChange,
   className,
-  placeholder = "What would you like to know?",
+  placeholder = "Ask anything...",
   minHeight = 48,
   maxHeight = 164,
   disableAutoResize = false,
@@ -117,7 +117,7 @@ export const PromptInputTools = ({
   <div
     className={cn(
       "flex items-center gap-1",
-      "[&_button:first-child]:rounded-bl-xl",
+      "[&_button:first-child]:rounded-full",
       className
     )}
     {...props}

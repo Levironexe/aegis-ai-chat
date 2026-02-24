@@ -119,7 +119,7 @@ export const ReasoningTrigger = memo(
     return (
       <CollapsibleTrigger
         className={cn(
-          "flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+          "flex items-center gap-1 rounded-[14px] px-1.5 py-0.5 text-[11px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
           className
         )}
         {...props}
@@ -161,7 +161,7 @@ export const ReasoningContent = memo(
       )}
       {...props}
     >
-      <div className="max-h-48 overflow-y-auto rounded-md border border-border/50 bg-muted/30 p-2.5">
+      <div className="max-h-48 overflow-y-auto rounded-[14px] border border-border/50 bg-muted/30 p-2.5">
         <Response className="grid gap-1 text-[11px] **:text-[11px] [&_li]:my-0 [&_ol]:my-1 [&_p]:my-0 [&_ul]:my-1">
           {children}
         </Response>

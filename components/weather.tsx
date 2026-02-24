@@ -389,7 +389,7 @@ export function Weather({
               return (
                 <div
                   className={cx(
-                    "flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-1 py-1.5",
+                    "flex min-w-0 flex-1 flex-col items-center gap-1 rounded-[14px] px-1 py-1.5",
                     {
                       "bg-white/20": isCurrentHour,
                     }

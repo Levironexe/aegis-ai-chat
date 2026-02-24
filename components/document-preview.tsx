@@ -124,7 +124,7 @@ const LoadingSkeleton = ({ artifactKind }: { artifactKind: ArtifactKind }) => (
     <div className="flex h-[57px] flex-row items-center justify-between gap-2 rounded-t-2xl border border-b-0 p-4 dark:border-zinc-700 dark:bg-muted">
       <div className="flex flex-row items-center gap-3">
         <div className="text-muted-foreground">
-          <div className="size-4 animate-pulse rounded-md bg-muted-foreground/20" />
+          <div className="size-4 animate-pulse rounded-[14px] bg-muted-foreground/20" />
         </div>
         <div className="h-4 w-24 animate-pulse rounded-lg bg-muted-foreground/20" />
       </div>
@@ -189,7 +189,7 @@ const PureHitboxLayer = ({
       role="presentation"
     >
       <div className="flex w-full items-center justify-end p-4">
-        <div className="absolute top-[13px] right-[9px] rounded-md p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+        <div className="absolute top-[13px] right-[9px] rounded-[14px] p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700">
           <FullscreenIcon />
         </div>
       </div>
