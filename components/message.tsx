@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { Vote } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { cn, sanitizeText } from "@/lib/utils";
+import { chatModels } from "@/lib/ai/models";
+import { ModelSelectorLogo } from "./ai-elements/model-selector";
 import { useDataStream } from "./data-stream-provider";
 import { DocumentToolResult } from "./document";
 import { DocumentPreview } from "./document-preview";
@@ -16,7 +18,6 @@ import {
   ToolInput,
   ToolOutput,
 } from "./elements/tool";
-import { SparklesIcon } from "./icons";
 import { MessageActions } from "./message-actions";
 import { MessageEditor } from "./message-editor";
 import { MessageReasoning } from "./message-reasoning";
@@ -33,6 +34,7 @@ const PurePreviewMessage = ({
   regenerate,
   isReadonly,
   requiresScrollPadding: _requiresScrollPadding,
+  selectedModelId,
 }: {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];
   chatId: string;
@@ -43,12 +45,22 @@ const PurePreviewMessage = ({
   regenerate: UseChatHelpers<ChatMessage>["regenerate"];
   isReadonly: boolean;
   requiresScrollPadding: boolean;
+  selectedModelId: string;
 }) => {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   const attachmentsFromMessage = message.parts.filter(
     (part) => part.type === "file"
   );
+
+  // Get provider:
+  // 1) Use metadata.provider if available (from database)
+  // 2) Otherwise use selectedModelId (for new/streaming messages in current session)
+  const provider = message.metadata?.provider?.toLowerCase() ||
+    (() => {
+      const selectedModel = chatModels.find((model) => model.id === selectedModelId);
+      return selectedModel?.provider.toLowerCase() || "anthropic";
+    })();
 
   useDataStream();
 
@@ -65,8 +77,8 @@ const PurePreviewMessage = ({
         })}
       >
         {message.role === "assistant" && (
-          <div className="-mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
-            <SparklesIcon size={14} />
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-background border border-border">
+            <ModelSelectorLogo provider={provider} className="size-6"/>
           </div>
         )}
 
@@ -128,15 +140,16 @@ const PurePreviewMessage = ({
                   <div key={key}>
                     <MessageContent
                       className={cn({
-                        "wrap-break-word w-fit rounded-2xl px-3 py-2 text-right text-white":
+                        "wrap-break-word w-fit rounded-2xl px-3 py-2 text-right text-white text-[15px]":
                           message.role === "user",
-                        "bg-transparent px-0 py-0 text-left":
+                        "bg-transparent px-0 py-0 text-left text-[15px]":
                           message.role === "assistant",
+                        
                       })}
                       data-testid="message-content"
                       style={
                         message.role === "user"
-                          ? { backgroundColor: "#006cff" }
+                          ? { backgroundColor: "#171717" }
                           : undefined
                       }
                     >
@@ -195,7 +208,7 @@ const PurePreviewMessage = ({
                         type="tool-getWeather"
                       />
                       <ToolContent>
-                        <div className="px-4 py-3 text-muted-foreground text-sm">
+                        <div className="px-4 py-3 text-muted-foreground text-[15px]">
                           Weather lookup was denied.
                         </div>
                       </ToolContent>
@@ -229,7 +242,7 @@ const PurePreviewMessage = ({
                       {state === "approval-requested" && approvalId && (
                         <div className="flex items-center justify-end gap-2 border-t px-4 py-3">
                           <button
-                            className="rounded-[14px] px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
+                            className="rounded-[14px] px-3 py-1.5 text-muted-foreground text-[15px] transition-colors hover:bg-muted hover:text-foreground"
                             onClick={() => {
                               addToolApprovalResponse({
                                 id: approvalId,
@@ -242,7 +255,7 @@ const PurePreviewMessage = ({
                             Deny
                           </button>
                           <button
-                            className="rounded-[14px] bg-background px-3 py-1.5 text-primary-foreground text-sm transition-colors hover:bg-background/90"
+                            className="rounded-[14px] bg-background px-3 py-1.5 text-primary-foreground text-[15px] transition-colors hover:bg-background/90"
                             onClick={() => {
                               addToolApprovalResponse({
                                 id: approvalId,
@@ -363,7 +376,11 @@ const PurePreviewMessage = ({
 
 export const PreviewMessage = PurePreviewMessage;
 
-export const ThinkingMessage = () => {
+export const ThinkingMessage = ({ selectedModelId }: { selectedModelId: string }) => {
+  // Extract provider from selectedModelId
+  const selectedModel = chatModels.find((model) => model.id === selectedModelId);
+  const provider = selectedModel?.provider.toLowerCase() || "anthropic";
+
   return (
     <div
       className="group/message fade-in w-full animate-in duration-300"
@@ -371,20 +388,20 @@ export const ThinkingMessage = () => {
       data-testid="message-assistant-loading"
     >
       <div className="flex items-start justify-start gap-3">
-        <div className="-mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-background border border-border">
           <div className="animate-pulse">
-            <SparklesIcon size={14} />
+            <ModelSelectorLogo provider={provider} className="size-6" />
           </div>
         </div>
 
         <div className="flex w-full flex-col gap-2 md:gap-4">
-          <div className="flex items-center gap-1 p-0 text-muted-foreground text-sm">
+          <div className="flex items-center gap-1 p-0 text-muted-foreground text-[15px]">
             <span className="animate-pulse">Thinking</span>
-            <span className="inline-flex">
+            {/* <span className="inline-flex">
               <span className="animate-bounce [animation-delay:0ms]">.</span>
               <span className="animate-bounce [animation-delay:150ms]">.</span>
               <span className="animate-bounce [animation-delay:300ms]">.</span>
-            </span>
+            </span> */}
           </div>
         </div>
       </div>

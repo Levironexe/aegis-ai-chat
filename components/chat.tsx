@@ -73,8 +73,9 @@ export function Chat({
   const [input, setInput] = useState<string>("");
   const [showCreditCardAlert, setShowCreditCardAlert] = useState(false);
   const [currentModelId, setCurrentModelId] = useState(initialChatModel);
-  const currentModelIdRef = useRef(currentModelId);
+  const currentModelIdRef = useRef(initialChatModel);
 
+  // Sync ref with state
   useEffect(() => {
     currentModelIdRef.current = currentModelId;
   }, [currentModelId]);
@@ -138,6 +139,28 @@ export function Chat({
       setDataStream((ds) => (ds ? [...ds, dataPart] : []));
     },
     onFinish: () => {
+      // Inject provider into the last assistant message's metadata
+      const provider = currentModelIdRef.current?.split("/")[0] || null;
+      if (provider) {
+        setMessages((currentMessages) => {
+          const lastMessage = currentMessages[currentMessages.length - 1];
+          if (lastMessage?.role === "assistant" && !lastMessage.metadata?.provider) {
+            return currentMessages.map((msg, idx) => {
+              if (idx === currentMessages.length - 1) {
+                return {
+                  ...msg,
+                  metadata: {
+                    createdAt: msg.metadata?.createdAt || new Date().toISOString(),
+                    provider,
+                  },
+                } as ChatMessage;
+              }
+              return msg;
+            });
+          }
+          return currentMessages;
+        });
+      }
       mutate(unstable_serialize(getChatHistoryPaginationKey));
     },
     onError: (error) => {
@@ -198,7 +221,7 @@ export function Chat({
         />
 
         {messages.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-8 px-2 pb-16 md:px-4 md:pb-22 w-full max-w-4xl mx-auto">
+          <div className="flex flex-1 flex-col items-center justify-center gap-8 px-2 pb-16 md:px-4 md:pb-28 w-full max-w-4xl mx-auto">
             <Greeting />
             <div className="w-full">
               {!isReadonly && (
@@ -229,7 +252,7 @@ export function Chat({
               isReadonly={isReadonly}
               messages={messages}
               regenerate={regenerate}
-              selectedModelId={initialChatModel}
+              selectedModelId={currentModelId}
               setMessages={setMessages}
               status={status}
               votes={votes}

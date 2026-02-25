@@ -66,6 +66,7 @@ function PureMessages({
               requiresScrollPadding={
                 hasSentMessage && index === messages.length - 1
               }
+              selectedModelId={_selectedModelId}
               setMessages={setMessages}
               vote={
                 votes
@@ -80,7 +81,7 @@ function PureMessages({
               msg.parts?.some(
                 (part) => "state" in part && part.state === "approval-responded"
               )
-            ) && <ThinkingMessage />}
+            ) && <ThinkingMessage selectedModelId={_selectedModelId} />}
 
           <div
             className="min-h-[24px] min-w-[24px] shrink-0"
